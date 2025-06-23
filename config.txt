@@ -1,0 +1,5 @@
+#Introduce en e ste espacio tus datosAdd commentMore actions
+TOKEN=""
+CHAT_ID=""
+LOG_PATH=""
+RESPALDO_DIR=""
