@@ -2,7 +2,6 @@
 
 Sistema automatizado para la administración de servicios en entornos Linux con notificaciones en tiempo real vía Telegram.
 
-# Tabla de Contenidos
 
 ## Descripción
 
@@ -250,3 +249,255 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 
 **Nota**: Este es un proyecto académico desarrollado para fines educativos. Se recomienda realizar pruebas exhaustivas antes de implementar en entornos de producción u algun otro.
+
+
+# Automated service manager with notifications via the Telegram Bot API
+
+Automated system for Linux service administration with real-time notifications with Telegram API.
+
+
+## Description
+
+This project provides a complete suite of tools for automated Linux service administration, including user management, service monitoring, automatic backups, and remote script execution. All operations are logged in detail and generate automatic notifications via Telegram.
+
+## Features
+
+- **User Management**: Creation, deletion, and modification of system users
+- **Service Monitoring**: Automatic supervision and restart of critical services
+- **Backup System**: Automatic generation of tar.gz files with timestamp
+- **Remote Execution**: Distribution and execution of scripts on multiple hosts
+- **Resource Monitoring**: Continuous monitoring of CPU and disk space
+- **Telegram Notifications**: Instant alerts for all system events
+- **Complete Logging**: Detailed logging of all operations with timestamp
+
+## Installation
+
+### Prerequisites
+
+- Linux system (Ubuntu/Debian/CentOS)
+- Administrator permissions
+- Internet connection
+- Packages: `curl`, `tar`, `ssh`, `systemctl`
+
+### Quick Installation
+
+```
+# Clone the repository
+git clone https://github.com/user/service-manager-telegram.git
+cd service-manager-telegram
+
+# Make scripts executable
+chmod +x *.sh
+
+# Create necessary directories
+sudo mkdir -p /var/log/service_management
+sudo mkdir -p /backup
+```
+
+## Configuration
+
+### 1. Telegram Bot Configuration
+
+1. Create bot with @BotFather on Telegram
+2. Get the bot token
+3. Get Chat ID by sending a message and querying:
+   ```
+   https://api.telegram.org/bot<TOKEN>/getUpdates
+   ```
+
+### 2. Configuration File
+
+Edit `config.txt`:
+
+```
+# Telegram Configuration
+TOKEN="your_bot_token"
+CHAT_ID="your_chat_id"
+
+# System Paths
+LOG_PATH="/var/log/service_management"
+RESPALDO_DIR="/home/user/documents"
+BACKUP_PATH="/backup"
+```
+
+### 3. Service Configuration
+
+Edit `servicios.txt`:
+```
+ssh
+apache2
+mysql
+nginx
+```
+
+### 4. Remote Hosts Configuration
+
+Edit `host.txt`:
+```
+user@192.168.1.10
+admin@company.server.com
+root@backup.local
+```
+
+## Usage
+
+### Main Scripts
+
+#### User Management
+```
+sudo ./usuarios.sh
+```
+Interactive interface to create, delete, and modify users.
+
+#### Service Monitoring
+```
+./servicios.sh
+```
+Checks and restarts services defined in `servicios.txt`.
+
+#### Backup System
+```
+./respaldo.sh
+```
+Creates compressed backup of configured directory.
+
+#### Remote Execution
+```
+./remoto.sh
+```
+Executes `hola.sh` on all configured hosts.
+
+#### Resource Monitoring
+```
+# Default limits (70% CPU, 70% disk)
+./monitoreo.sh
+
+# Custom limits
+./monitoreo.sh 80 85
+```
+
+### Automation with Cron
+
+```
+# Daily backup at 2:00 AM
+0 2 * * * /path/to/project/respaldo.sh
+
+# Check services every 5 minutes
+*/5 * * * * /path/to/project/servicios.sh
+
+# Continuous monitoring
+@reboot /path/to/project/monitoreo.sh &
+```
+
+## Architecture
+
+### File Structure
+
+```
+service-manager-telegram/
+├── usuarios.sh          # User management
+├── servicios.sh         # Service monitoring
+├── respaldo.sh          # Backup system
+├── remoto.sh           # Remote execution
+├── monitoreo.sh        # Resource monitoring
+├── hola.sh             # Example script
+├── config.txt          # Main configuration
+├── servicios.txt       # Service list
+├── host.txt            # Host list
+└── README.md           # This file
+```
+
+### Workflow
+
+1. **Configuration Loading**: All scripts load variables from `config.txt`
+2. **Operation Execution**: Each script performs its specific function
+3. **Log Recording**: All actions are logged with timestamp
+4. **Telegram Notification**: Important events are automatically notified
+
+### Log System
+
+Logs are stored in `/var/log/service_management/`:
+
+- `acciones.log`: User management
+- `servicios.log`: Service status
+- `remoto.log`: Remote execution
+
+Format:
+```
+2024-01-15 14:30:25 - User john created successfully
+2024-01-15 14:35:10 - Service ssh restarted
+```
+
+## Detailed Features
+
+### usuarios.sh
+
+- Interactive menu with 4 options
+- User existence validation
+- Secure password input (hidden)
+- Automatic notification of all actions
+
+### servicios.sh
+
+- Automatic reading of service list
+- Silent verification with `systemctl`
+- Automatic restart of failed services
+- Notification only in case of problems
+
+### respaldo.sh
+
+- Unique names based on timestamp
+- Source directory verification
+- Automatic creation of destination directories
+- Validation of successful backups
+
+### remoto.sh
+
+- Secure transfer via SCP
+- Remote execution via SSH
+- Command output capture
+- Connection error handling
+
+### monitoreo.sh
+
+- Precise CPU calculation from `/proc/stat`
+- Disk space monitoring
+- Configurable limits by parameters
+- Alerts only when limits are exceeded
+
+## Troubleshooting
+
+### Common Issues
+
+**Bot doesn't send notifications:**
+```bash
+# Verify configuration
+curl -s "https://api.telegram.org/bot<TOKEN>/getMe"
+```
+
+**Services don't restart:**
+```bash
+# Check sudo permissions
+sudo systemctl status <service>
+```
+
+**SSH connection error:**
+```bash
+# Verify key authentication
+ssh-copy-id user@host
+```
+
+## License
+
+This project is under the MIT License. See the `LICENSE` file for more details.
+
+## Contact
+
+- **Project**: Automated Service Manager
+- **Author**: José Antonio Montane Dominguez, Rodrigo Fernando Perez Sanchez y Roberto Perez de la Garza
+- **University**: Universidad Veracruzana
+- **Subject**: Programming in Service Administration
+
+---
+
+**Note**: This is an academic project developed for educational purposes. Thorough testing is recommended before implementing in production environments or others.
